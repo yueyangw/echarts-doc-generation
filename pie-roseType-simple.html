@@ -3,10 +3,34 @@
 
 <head>
     <meta charset="utf-8">
+    <script>
+        function saveAsDoc() { //保存为Document，将数据打包POST给后台生成docx
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open('POST', '/savedoc', true);
+            httpRequest.setRequestHeader("Content-type","application/json");
+            datas = { "imgdata": myChart.getDataURL(),
+                        "echartsData": option};
+            httpRequest.responseType = 'blob';
+            httpRequest.onload = function () {
+                var data = httpRequest.response;
+                var blob = new Blob([data])
+                var blobUrl = window.URL.createObjectURL(blob);
+                doDownload(blobUrl, httpRequest)
+            };
+            httpRequest.send(JSON.stringify(datas));
+        }
+
+        function doDownload(blobUrl) {
+            var a = document.createElement('a');
+            a.download = "report.docx"
+            a.href = blobUrl;
+            a.click();
+        }
+    </script>
 </head>
 
 <body style="height: 100%; margin: 0">
-<input type="button" value="导出图片" onclick="saveAsImage()"/>
+<input type="button" value="导出图片" onclick="saveAsDoc()"/>
 <div id="container" style="height: 100%"></div>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.0/dist/echarts.js"></script>
@@ -56,15 +80,6 @@
 
     if (option && typeof option === 'object') {
         myChart.setOption(option);
-    }
-
-    function saveAsImage() {
-        var httpRequest = new XMLHttpRequest();
-        httpRequest.open('POST', '/saveimg', true);
-        httpRequest.setRequestHeader("Content-type","application/json");
-        imgdata = {"imgdata": myChart.getDataURL()};
-        console.log(imgdata)
-        httpRequest.send(JSON.stringify(imgdata));
     }
 
 </script>
