@@ -10,9 +10,15 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 app = Flask(__name__)
 
 
-@app.route("/")
-def mainPage():
+@app.route("/1")
+def page1():
     html = open("pie-roseType-simple.html", "r")
+    return html.read()
+
+
+@app.route("/2")
+def page2():
+    html = open("area-stack.html", "r")
     return html.read()
 
 
@@ -39,10 +45,17 @@ def base64ToImage(imgdata):
 def docBuilder(doc, img, datas):
     basicInfo = datas['series'][0]
     mapp = {
-        'pie': '饼图'
+        'pie': '饼图',
+        'line': '折线图',
+        'bar': '柱状图',
+        'scatter': '散点图'
     }
+    try:
+        title = datas['title']['text']
+    except:
+        title = basicInfo['name']
     datas = {
-        'topic': basicInfo['name'],
+        'topic': title,
         'picture': img,
         'category': mapp[basicInfo['type']],
         'data': basicInfo['data']
