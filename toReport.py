@@ -21,4 +21,5 @@ def saveAsImage():
 def base64ToImage(imgdata):
     strs = imgdata[22:] #返回的base64字符串前面有几个多余字符，这里删掉
     imgdata = base64.b64decode(strs) #把base64的图片解码成二进制返回
+    
     return imgdata
