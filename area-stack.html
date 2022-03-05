@@ -5,60 +5,65 @@
 <html style="height: 100%">
 
 <head>
-  <meta charset="utf-8">
-  <script>
-    function saveAsDoc() { //保存为Document，将数据打包POST给后台生成docx
-      var httpRequest = new XMLHttpRequest();
-      httpRequest.open('POST', '/savedoc', true);
-      httpRequest.setRequestHeader("Content-type", "application/json");
-      datas = {
-        "imgdata": myChart.getDataURL(),
-        "echartsData": option
-      };
-      httpRequest.responseType = 'blob';
-      httpRequest.onload = function () {
-        var data = httpRequest.response;
-        var blob = new Blob([data])
-        var blobUrl = window.URL.createObjectURL(blob);
-        doDownload(blobUrl, httpRequest)
-      };
-      httpRequest.send(JSON.stringify(datas));
-    }
+    <meta charset="utf-8">
+    <script>
+        function saveAsDoc() { //保存为Document，将数据打包POST给后台生成docx
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open('POST', '/savedoc', true);
+            httpRequest.setRequestHeader("Content-type", "application/json");
+            datas = {
+                "imgdata": myChart.getDataURL(),
+                "echartsData": option
+            };
+            httpRequest.responseType = 'blob';
+            httpRequest.onload = function () {
+                var data = httpRequest.response;
+                var blob = new Blob([data])
+                var blobUrl = window.URL.createObjectURL(blob);
+                if (blob.size != 0) {
+                    doDownload(blobUrl, httpRequest)
+                }
+                else {
+                    confirm("生成文档失败！")
+                }
+            };
+            httpRequest.send(JSON.stringify(datas));
+        }
 
-    function doDownload(blobUrl) {
-      var a = document.createElement('a');
-      a.download = "report.docx"
-      a.href = blobUrl;
-      a.click();
-    }
-  </script>
+        function doDownload(blobUrl) {
+            var a = document.createElement('a');
+            a.download = "report.docx"
+            a.href = blobUrl;
+            a.click();
+        }
+    </script>
 </head>
 
 <body style="height: 100%; margin: 0">
-  <input type="button" value="导出docx" onclick="saveAsDoc()"/>
-  <div id="container" style="height: 100%"></div>
+<input type="button" value="导出docx" onclick="saveAsDoc()"/>
+<div id="container" style="height: 100%"></div>
 
 
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-  <!-- Uncomment this line if you want to dataTool extension
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/dataTool.min.js"></script>
-        -->
-  <!-- Uncomment this line if you want to use gl extension
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
-        -->
-  <!-- Uncomment this line if you want to echarts-stat extension
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
-        -->
-  <!-- Uncomment this line if you want to use map
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/china.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/world.js"></script>
-        -->
-  <!-- Uncomment these two lines if you want to use bmap extension
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<!-- Uncomment this line if you want to dataTool extension
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/dataTool.min.js"></script>
+      -->
+<!-- Uncomment this line if you want to use gl extension
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+      -->
+<!-- Uncomment this line if you want to echarts-stat extension
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+      -->
+<!-- Uncomment this line if you want to use map
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/china.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/world.js"></script>
+      -->
+<!-- Uncomment these two lines if you want to use bmap extension
         <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=<Your Key Here>"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@{{version}}/dist/extension/bmap.min.js"></script>
         -->
 
-  <script type="text/javascript">
+<script type="text/javascript">
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
     var app = {};
@@ -66,109 +71,108 @@
     var option;
 
 
-
     option = {
-      title: {
-        text: 'Stacked Area Chart'
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#6a7985'
-          }
-        }
-      },
-      legend: {
-        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {}
-        }
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: [
-        {
-          type: 'category',
-          boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value'
-        }
-      ],
-      series: [
-        {
-          name: 'Email',
-          type: 'line',
-          stack: 'Total',
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          data: [120, 132, 101, 134, 90, 230, 210]
+        title: {
+            text: 'Stacked Area Chart'
         },
-        {
-          name: 'Union Ads',
-          type: 'line',
-          stack: 'Total',
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          data: [220, 182, 191, 234, 290, 330, 310]
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
         },
-        {
-          name: 'Video Ads',
-          type: 'line',
-          stack: 'Total',
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          data: [150, 232, 201, 154, 190, 330, 410]
+        legend: {
+            data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
         },
-        {
-          name: 'Direct',
-          type: 'line',
-          stack: 'Total',
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          data: [320, 332, 301, 334, 390, 330, 320]
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
         },
-        {
-          name: 'Search Engine',
-          type: 'line',
-          stack: 'Total',
-          label: {
-            show: true,
-            position: 'top'
-          },
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          data: [820, 932, 901, 934, 1290, 1330, 1320]
-        }
-      ]
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: 'Email',
+                type: 'line',
+                stack: 'Total',
+                areaStyle: {},
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name: 'Union Ads',
+                type: 'line',
+                stack: 'Total',
+                areaStyle: {},
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name: 'Video Ads',
+                type: 'line',
+                stack: 'Total',
+                areaStyle: {},
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name: 'Direct',
+                type: 'line',
+                stack: 'Total',
+                areaStyle: {},
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name: 'Search Engine',
+                type: 'line',
+                stack: 'Total',
+                label: {
+                    show: true,
+                    position: 'top'
+                },
+                areaStyle: {},
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [820, 932, 901, 934, 1290, 1330, 1320]
+            }
+        ]
     };
 
     if (option && typeof option === 'object') {
-      myChart.setOption(option);
+        myChart.setOption(option);
     }
 
-  </script>
+</script>
 </body>
 
 </html>

@@ -15,7 +15,12 @@
                 var data = httpRequest.response;
                 var blob = new Blob([data])
                 var blobUrl = window.URL.createObjectURL(blob);
-                doDownload(blobUrl, httpRequest)
+                if(blob.size != 0) {
+                    doDownload(blobUrl, httpRequest)
+                }
+                else {
+                    confirm("生成文档失败！")
+                }
             };
             httpRequest.send(JSON.stringify(datas));
         }
